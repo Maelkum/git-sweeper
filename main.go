@@ -79,12 +79,11 @@ func run() error {
 
 func print(branch string, commit *object.Commit) {
 	ct := commit.Author.When
-	fresh := calcFreshness(ct)
 	message := fmtMessage(commit.Message)
 
 	text := fmt.Sprintf("%-32s\t%s\t%s\n", branch, ct.Format("2006-01-02 15:04"), message)
 
-	switch fresh {
+	switch calcFreshness(ct) {
 	case fresh:
 		color.Green(text)
 	case twoWeeksPlus:
@@ -116,7 +115,7 @@ func fmtMessage(message string) string {
 type freshness int
 
 const (
-	fresh freshness = iota
+	fresh freshness = iota + 1
 	twoWeeksPlus
 	twoMonthsPlus
 	sixMonthsPlus
